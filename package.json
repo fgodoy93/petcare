@@ -10,7 +10,7 @@
   "keywords": [
     "petcare", "veterinaria", "mascotas", "nodejs",  "express"
   ],
-  "author": "",
+  "author": "Francisco Godoy",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
