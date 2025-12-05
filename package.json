@@ -1,14 +1,14 @@
 {
   "name": "petcare",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sistema de control veterinario para mascotas",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "keywords": [
-    "petcare"
+    "petcare", "veterinaria", "mascotas", "nodejs",  "express"
   ],
   "author": "",
   "license": "ISC",
