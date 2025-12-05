@@ -15,6 +15,7 @@ const sequelize = require("./src/config/db")
 
 const app = express()
 
+// Middlewares
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -26,14 +27,17 @@ app.use(fileUpload({
     responseOnLimit: 'El archivo es demasiado grande'
 }))
 
+// Middleware de autenticación
 const { currentUser } = require('./src/middlewares/auth')
 app.use(currentUser)
 
+// Middleware para hacer disponible el tutor en todas las vistas
 app.use((req, res, next) => {
     res.locals.tutor = req.auth || null
     next()
 })
 
+// Configuración de Handlebars
 const hbs = exphbs.create({
     defaultLayout: 'main',
     partialsDir: path.join(__dirname, 'src', 'views', 'partials'),
@@ -64,14 +68,17 @@ app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
 app.set('views', path.join(__dirname, 'src', 'views'))
 
+// Rutas
 app.use('/mascotas', mascotasRouter)
 app.use('/vacunas', vacunasRouter)
 app.use('/antiparasitarios', antiparasitariosRouter)
 app.use('/consultas', consultasRouter)
 app.use('/auth', authRouter)
 
+// Ruta principal
 app.get('/', (req, res) => res.redirect('/mascotas'))
 
+// Manejo de errores
 app.use((err, req, res, next) => {
     console.error('===== ERROR COMPLETO =====')
     console.error('Mensaje:', err.message)
@@ -93,6 +100,7 @@ app.use((err, req, res, next) => {
     res.status(500).send(`Error: ${err.message || 'Algo salió mal...'}`)
 })
 
+// Iniciar servidor
 sequelize.authenticate()
     .then(() => {
         console.log('Conexión a base de datos establecida')
