@@ -1,0 +1,47 @@
+<div class="container my-5">
+    {{> flash }}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Mis Mascotas</h1>
+        <a href="/mascotas/new" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Agregar Mascota
+        </a>
+    </div>
+
+    {{#if mascotas.length}}
+        <div class="row">
+            {{#each mascotas}}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {{#if foto}}
+                            <img src="{{foto}}" class="card-img-top" alt="{{nombre}}" style="height: 250px; object-fit: cover;">
+                        {{else}}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                                <i class="bi bi-image" style="font-size: 4rem; color: white;"></i>
+                            </div>
+                        {{/if}}
+                        <div class="card-body">
+                            <h5 class="card-title">{{nombre}}</h5>
+                            <p class="card-text">
+                                <strong>Especie:</strong> {{especie}}<br>
+                                <strong>Raza:</strong> {{raza}}<br>
+                                {{#if fechaNacimiento}}
+                                    <strong>Edad:</strong> {{calcularEdad fechaNacimiento}} años
+                                {{/if}}
+                            </p>
+                            <div class="d-grid gap-2">
+                                <a href="/mascotas/{{id_mascota}}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="alert alert-info text-center">
+            <h4>No tienes mascotas registradas</h4>
+            <p>Comienza agregando tu primera mascota para llevar un registro completo de su salud</p>
+            <a href="/mascotas/new" class="btn btn-primary">Agregar Primera Mascota</a>
+        </div>
+    {{/if}}
+</div>

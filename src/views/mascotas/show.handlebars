@@ -1,0 +1,165 @@
+<div class="container my-5">
+    {{> flash }}
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                {{#if mascota.foto}}
+                    <img src="{{mascota.foto}}" class="card-img-top" alt="{{mascota.nombre}}">
+                {{else}}
+                    <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="bi bi-image" style="font-size: 5rem; color: white;"></i>
+                    </div>
+                {{/if}}
+                <div class="card-body">
+                    <h3 class="card-title">{{mascota.nombre}}</h3>
+                    <p class="card-text">
+                        <strong>Especie:</strong> {{mascota.especie}}<br>
+                        <strong>Raza:</strong> {{mascota.raza}}<br>
+                        {{#if mascota.fecha_nacimiento}}
+                            <strong>Fecha Nacimiento:</strong> {{formatDate mascota.fecha_nacimiento}}<br>
+                            <strong>Edad:</strong> {{calcularEdad mascota.fecha_nacimiento}} años
+                        {{/if}}
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="/mascotas/{{mascota.id_mascota}}/edit" class="btn btn-warning">Editar</a>
+                        <form action="/mascotas/{{mascota.id_mascota}}?_method=DELETE" method="POST">
+                            <button class="btn btn-danger w-100" type="submit" 
+                                onclick="return confirm('¿Eliminar esta mascota y todos sus registros?')">
+                                Eliminar
+                            </button>
+                        </form>
+                        <a href="/mascotas" class="btn btn-secondary">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <ul class="nav nav-tabs mb-4" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#vacunas" type="button">
+                        Vacunas
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#antiparasitarios" type="button">
+                        Antiparasitarios
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#consultas" type="button">
+                        Consultas
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="vacunas">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Historial de Vacunas</h4>
+                        <a href="/vacunas/new?id_mascota={{mascota.id_mascota}}" class="btn btn-sm btn-primary">
+                            Nueva Vacuna
+                        </a>
+                    </div>
+                    {{#if mascota.vacunas.length}}
+                        <div class="list-group">
+                            {{#each mascota.vacunas}}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{tipo}}</h5>
+                                        <small>{{formatDate fecha}}</small>
+                                    </div>
+                                    {{#if veterinario}}
+                                        <p class="mb-1"><strong>Veterinario:</strong> {{veterinario}}</p>
+                                    {{/if}}
+                                    <div class="mt-2">
+                                        <a href="/vacunas/{{id_vacuna}}/edit" class="btn btn-sm btn-warning">Editar</a>
+                                        <form action="/vacunas/{{id_vacuna}}?_method=DELETE" method="POST" class="d-inline">
+                                            <button class="btn btn-sm btn-danger" type="submit" 
+                                                onclick="return confirm('¿Eliminar este registro?')">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="alert alert-info">No hay vacunas registradas</div>
+                    {{/if}}
+                </div>
+
+                <div class="tab-pane fade" id="antiparasitarios">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Historial de Antiparasitarios</h4>
+                        <a href="/antiparasitarios/new?id_mascota={{mascota.id_mascota}}" class="btn btn-sm btn-primary">
+                            Nuevo Antiparasitario
+                        </a>
+                    </div>
+                    {{#if mascota.antiparasitarios.length}}
+                        <div class="list-group">
+                            {{#each mascota.antiparasitarios}}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{producto}}</h5>
+                                        <small>{{formatDate fecha}}</small>
+                                    </div>
+                                    {{#if dosis}}
+                                        <p class="mb-1"><strong>Dosis:</strong> {{dosis}}</p>
+                                    {{/if}}
+                                    <div class="mt-2">
+                                        <a href="/antiparasitarios/{{id_antiparasitario}}/edit" class="btn btn-sm btn-warning">Editar</a>
+                                        <form action="/antiparasitarios/{{id_antiparasitario}}?_method=DELETE" method="POST" class="d-inline">
+                                            <button class="btn btn-sm btn-danger" type="submit" 
+                                                onclick="return confirm('¿Eliminar este registro?')">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="alert alert-info">No hay antiparasitarios registrados</div>
+                    {{/if}}
+                </div>
+
+                <div class="tab-pane fade" id="consultas">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Historial de Consultas</h4>
+                        <a href="/consultas/new?id_mascota={{mascota.id_mascota}}" class="btn btn-sm btn-primary">
+                            Nueva Consulta
+                        </a>
+                    </div>
+                    {{#if mascota.consultas.length}}
+                        <div class="list-group">
+                            {{#each mascota.consultas}}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{motivo}}</h5>
+                                        <small>{{formatDate fecha}}</small>
+                                    </div>
+                                    {{#if veterinario}}
+                                        <p class="mb-1"><strong>Veterinario:</strong> {{veterinario}}</p>
+                                    {{/if}}
+                                    <div class="mt-2">
+                                        <a href="/consultas/{{id_consulta}}/edit" class="btn btn-sm btn-warning">Editar</a>
+                                        <form action="/consultas/{{id_consulta}}?_method=DELETE" method="POST" class="d-inline">
+                                            <button class="btn btn-sm btn-danger" type="submit" 
+                                                onclick="return confirm('¿Eliminar este registro?')">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="alert alert-info">No hay consultas registradas</div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center mb-4">Editar Mascota</h1>
+            
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form action="/mascotas/{{mascota.id_mascota}}?_method=PUT" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre *</label>
+                            <input type="text" name="nombre" class="form-control" id="nombre" 
+                                value="{{mascota.nombre}}" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="especie" class="form-label">Especie *</label>
+                                <select name="especie" class="form-select" id="especie" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Perro" {{#if (eq mascota.especie "Perro")}}selected{{/if}}>Perro</option>
+                                    <option value="Gato" {{#if (eq mascota.especie "Gato")}}selected{{/if}}>Gato</option>
+                                    <option value="Ave" {{#if (eq mascota.especie "Ave")}}selected{{/if}}>Ave</option>
+                                    <option value="Conejo" {{#if (eq mascota.especie "Conejo")}}selected{{/if}}>Conejo</option>
+                                    <option value="Hamster" {{#if (eq mascota.especie "Hamster")}}selected{{/if}}>Hamster</option>
+                                    <option value="Reptil" {{#if (eq mascota.especie "Reptil")}}selected{{/if}}>Reptil</option>
+                                    <option value="Otro" {{#if (eq mascota.especie "Otro")}}selected{{/if}}>Otro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="raza" class="form-label">Raza</label>
+                                <input type="text" name="raza" class="form-control" id="raza" 
+                                    value="{{mascota.raza}}" placeholder="Ej: Golden Retriever, Siamés">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="sexo" class="form-label">Sexo *</label>
+                                <select name="sexo" class="form-select" id="sexo" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="macho" {{#if (eq mascota.sexo "macho")}}selected{{/if}}>Macho</option>
+                                    <option value="hembra" {{#if (eq mascota.sexo "hembra")}}selected{{/if}}>Hembra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="peso" class="form-label">Peso (kg)</label>
+                                <input type="number" name="peso" class="form-control" id="peso" 
+                                    step="0.01" min="0" max="999.99" value="{{mascota.peso}}" placeholder="Ej: 5.5">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="color" class="form-label">Color</label>
+                                <input type="text" name="color" class="form-control" id="color" 
+                                    value="{{mascota.color}}" placeholder="Ej: Negro, Blanco">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento *</label>
+                            <input type="date" name="fecha_nacimiento" class="form-control" id="fecha_nacimiento" 
+                                value="{{mascota.fechaNacimiento}}" required>
+                            <small class="text-muted">Nos ayuda a calcular la edad de tu mascota</small>
+                        </div>
+
+                        {{#if mascota.foto}}
+                            <div class="mb-3">
+                                <label class="form-label">Foto Actual</label>
+                                <div>
+                                    <img src="{{mascota.foto}}" alt="{{mascota.nombre}}" 
+                                        class="img-thumbnail" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        {{/if}}
+
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">
+                                {{#if mascota.foto}}Cambiar Foto{{else}}Agregar Foto{{/if}}
+                            </label>
+                            <input type="file" name="foto" class="form-control" id="foto" 
+                                accept="image/jpeg,image/jpg,image/png" onchange="previewImage(event)">
+                            <small class="text-muted d-block mb-2">Formatos: JPG, PNG. Máximo: 5MB</small>
+                            <div id="imagePreview" class="mt-2" style="display: none;">
+                                <img id="preview" src="" alt="Vista previa" 
+                                    class="img-thumbnail" style="max-height: 200px;">
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <small><strong>Nota:</strong> Los campos marcados con * son obligatorios</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="bi bi-check-circle"></i> Actualizar Mascota
+                            </button>
+                            <a href="/mascotas/{{mascota.id_mascota}}" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage(event) {
+    const file = event.target.files[0]
+    const preview = document.getElementById('preview')
+    const previewContainer = document.getElementById('imagePreview')
+    
+    if (file) {
+        const reader = new FileReader()
+        reader.onload = function(e) {
+            preview.src = e.target.result
+            previewContainer.style.display = 'block'
+        }
+        reader.readAsDataURL(file)
+    } else {
+        previewContainer.style.display = 'none'
+    }
+}
+</script>

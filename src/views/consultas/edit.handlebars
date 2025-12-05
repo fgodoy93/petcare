@@ -1,0 +1,38 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">Editar Consulta</h1>
+            
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form action="/consultas/{{consulta.id_consulta}}?_method=PUT" method="POST">
+                        <input type="hidden" name="id_mascota" value="{{consulta.id_mascota}}">
+
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label">Fecha de Consulta *</label>
+                            <input type="date" name="fecha" class="form-control" id="fecha" 
+                                value="{{consulta.fecha}}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="motivo" class="form-label">Motivo</label>
+                            <input type="text" name="motivo" class="form-control" id="motivo" 
+                                value="{{consulta.motivo}}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="veterinario" class="form-label">Veterinario</label>
+                            <input type="text" name="veterinario" class="form-control" id="veterinario" 
+                                value="{{consulta.veterinario}}">
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning">Actualizar Consulta</button>
+                            <a href="/mascotas/{{consulta.id_mascota}}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
