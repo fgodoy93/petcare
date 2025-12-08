@@ -9,7 +9,7 @@ Sistema web completo para llevar el control responsable de tus mascotas. Permite
 
 ## 🌐 Demo en Vivo
 
-**URL de la aplicación:** [[https://tu-app.railway.app](https://tu-app.railway.app)](https://petcare-production-3ed2.up.railway.app/)
+**URL de la aplicación:** [![https://tu-app.railway.app](https://tu-app.railway.app)](https://petcare-production-3ed2.up.railway.app/)
 
 ---
 
