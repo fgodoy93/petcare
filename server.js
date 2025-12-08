@@ -101,13 +101,15 @@ app.use((err, req, res, next) => {
 })
 
 // Iniciar servidor
-sequelize.authenticate()
+const { syncDatabase } = require('./src/models/index');
+
+syncDatabase()
     .then(() => {
-        console.log('Conexión a base de datos establecida')
         app.listen(PORT, () => {
-            console.log(`Servidor corriendo en http://localhost:${PORT}`)
-        })
+            console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+        });
     })
     .catch(err => {
-        console.error('Error al conectar con la base de datos:', err)
-    })
+        console.error('❌ Error fatal al iniciar:', err);
+        process.exit(1);
+    });
