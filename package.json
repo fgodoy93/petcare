@@ -4,9 +4,9 @@
   "description": "Sistema de gestión veterinaria para mascotas",
   "main": "server.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "npm run migrate && node server.js",
     "migrate": "npx sequelize-cli db:migrate",
-    "build": "npm install"
+    "dev": "nodemon server.js"
   },  
   "engines": {
     "node": "18.x"
