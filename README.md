@@ -11,20 +11,6 @@ Sistema web completo para llevar el control responsable de tus mascotas. Permite
 
 **URL de la aplicación:** [https://tu-app.railway.app](https://tu-app.railway.app)](https://petcare-production-3ed2.up.railway.app/)
 
-> 💡 Reemplaza con tu URL real de Railway
-
----
-
-## 📸 Capturas de Pantalla
-
-### Dashboard de Mascotas
-![Dashboard](https://via.placeholder.com/800x400?text=Dashboard+de+Mascotas)
-
-### Perfil de Mascota
-![Perfil](https://via.placeholder.com/800x400?text=Perfil+de+Mascota)
-
-> 💡 Agrega capturas reales de tu aplicación
-
 ---
 
 ## ✨ Características
@@ -84,7 +70,7 @@ Sistema web completo para llevar el control responsable de tus mascotas. Permite
 
 - **Node.js** v18.x o superior
 - **PostgreSQL** v13 o superior
-- **npm** o **yarn**
+- **npm**
 - Cuenta en **Railway** (para despliegue)
 
 ---
