@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h1 class="text-center mb-4">Editar Vacuna</h1>
-            
+
             <div class="card shadow">
                 <div class="card-body p-4">
                     <form action="/vacunas/{{vacuna.id_vacuna}}?_method=PUT" method="POST">
@@ -10,20 +10,45 @@
 
                         <div class="mb-3">
                             <label for="tipo" class="form-label">Tipo de Vacuna *</label>
-                            <input type="text" name="tipo" class="form-control" id="tipo" 
-                                value="{{vacuna.tipo}}" required>
+                            <input type="text" name="tipo" class="form-control" id="tipo" value="{{vacuna.tipo}}"
+                                required>
                         </div>
 
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha de Aplicación *</label>
-                            <input type="date" name="fecha" class="form-control" id="fecha" 
-                                value="{{vacuna.fecha}}" required>
+                            <input type="date" name="fecha" class="form-control" id="fecha" value="{{vacuna.fecha}}"
+                                required>
                         </div>
 
                         <div class="mb-3">
                             <label for="veterinario" class="form-label">Veterinario</label>
-                            <input type="text" name="veterinario" class="form-control" id="veterinario" 
-                                value="{{vacuna.veterinario}}">
+                            <input type="text" name="veterinario" class="form-control" id="veterinario"
+                                value="{{vacuna.veterinario}}" placeholder="Ej: Dr. Juan Pérez">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="duracion_dias" class="form-label">Duración de Protección (días)</label>
+                            <input type="number" name="duracion_dias" class="form-control" id="duracion_dias"
+                                value="{{vacuna.duracion_dias}}" placeholder="Ej: 365 (1 año)" min="1">
+                            <small class="text-muted">
+                                Si completas este campo, se calculará automáticamente la fecha de la próxima aplicación
+                            </small>
+                        </div>
+
+                        {{#if vacuna.proxima_aplicacion}}
+                        <div class="alert alert-success">
+                            <strong>📅 Próxima aplicación calculada:</strong> {{formatDate vacuna.proxima_aplicacion}}
+                        </div>
+                        {{/if}}
+
+                        <div class="alert alert-info">
+                            <small><strong>💡 Duraciones comunes:</strong></small>
+                            <ul class="mb-0 mt-2">
+                                <li>Rabia: 365 días (1 año)</li>
+                                <li>Triple/Séxtuple: 365 días (1 año)</li>
+                                <li>Tos de las perreras: 365 días</li>
+                                <li>Leucemia felina: 365 días</li>
+                            </ul>
                         </div>
 
                         <div class="d-grid gap-2">
