@@ -22,6 +22,18 @@ const Vacuna = sequelize.define('vacuna', {
     id_mascota: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    // ✅ NUEVO: Duración en días
+    duracion_dias: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: 'Duración de protección en días'
+    },
+    // ✅ NUEVO: Fecha calculada de próxima aplicación
+    proxima_aplicacion: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        comment: 'Fecha calculada para próxima dosis'
     }
 }, {
     tableName: 'vacunas',
