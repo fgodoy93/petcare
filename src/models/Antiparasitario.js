@@ -18,6 +18,18 @@ const Antiparasitario = sequelize.define('antiparasitario', {
     dosis: {
         type: DataTypes.STRING(100),
         allowNull: true
+    },
+    // ✅ NUEVO: Duración en días
+    duracion_dias: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: 'Duración de protección en días'
+    },
+    // ✅ NUEVO: Fecha calculada de próxima aplicación
+    proxima_aplicacion: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        comment: 'Fecha calculada para próxima dosis'
     }
 }, {
     tableName: 'antiparasitarios',
