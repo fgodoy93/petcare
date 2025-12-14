@@ -1,12 +1,36 @@
 const { Antiparasitario, Mascota } = require('../models/associations')
 const { requireAuth } = require('../middlewares/auth')
 
+// ✅ FUNCIÓN AUXILIAR CORREGIDA: Calcular próxima aplicación
+function calcularProximaAplicacion(fecha, duracionDias) {
+    if (!duracionDias || duracionDias <= 0) return null
+
+    // Asegurarse de que la fecha esté en formato correcto
+    const fechaBase = new Date(fecha + 'T00:00:00')
+
+    // Verificar que la fecha sea válida
+    if (isNaN(fechaBase.getTime())) {
+        console.error('Fecha inválida:', fecha)
+        return null
+    }
+
+    // Sumar los días de duración
+    fechaBase.setDate(fechaBase.getDate() + parseInt(duracionDias))
+
+    // Retornar en formato YYYY-MM-DD
+    const year = fechaBase.getFullYear()
+    const month = String(fechaBase.getMonth() + 1).padStart(2, '0')
+    const day = String(fechaBase.getDate()).padStart(2, '0')
+
+    return `${year}-${month}-${day}`
+}
+
 exports.new = [
     requireAuth,
     async (req, res, next) => {
         try {
             const { id_mascota } = req.query
-            
+
             const mascota = await Mascota.findOne({
                 where: { id_mascota, id_tutor: req.auth.id }
             })
@@ -26,7 +50,7 @@ exports.create = [
     requireAuth,
     async (req, res, next) => {
         try {
-            const { producto, fecha, dosis, id_mascota } = req.body
+            const { producto, fecha, dosis, duracion_dias, id_mascota } = req.body
 
             if (!producto || !fecha || !id_mascota) {
                 return res.status(400).send('Faltan campos obligatorios: producto, fecha y mascota')
@@ -40,10 +64,15 @@ exports.create = [
                 return res.status(404).send('Mascota no encontrada o no autorizada')
             }
 
+            // ✅ Calcular próxima aplicación
+            const proximaAplicacion = calcularProximaAplicacion(fecha, duracion_dias)
+
             await Antiparasitario.create({
                 producto,
                 fecha,
                 dosis: dosis || null,
+                duracion_dias: duracion_dias || null,
+                proxima_aplicacion: proximaAplicacion,
                 id_mascota: parseInt(id_mascota)
             })
 
@@ -62,7 +91,7 @@ exports.edit = [
         try {
             const antiparasitario = await Antiparasitario.findOne({
                 where: { id_antiparasitario: req.params.id },
-                include: [{ 
+                include: [{
                     model: Mascota,
                     as: 'mascota'
                 }]
@@ -90,7 +119,7 @@ exports.update = [
     async (req, res, next) => {
         try {
             const { id } = req.params
-            const { producto, fecha, dosis, id_mascota } = req.body
+            const { producto, fecha, dosis, duracion_dias, id_mascota } = req.body
 
             if (!producto || !fecha) {
                 return res.status(400).send('Faltan campos obligatorios')
@@ -98,7 +127,7 @@ exports.update = [
 
             const antiparasitario = await Antiparasitario.findOne({
                 where: { id_antiparasitario: id },
-                include: [{ 
+                include: [{
                     model: Mascota,
                     as: 'mascota'
                 }]
@@ -112,10 +141,15 @@ exports.update = [
                 return res.status(403).send('No autorizado')
             }
 
+            // ✅ Calcular próxima aplicación
+            const proximaAplicacion = calcularProximaAplicacion(fecha, duracion_dias)
+
             await antiparasitario.update({
                 producto,
                 fecha,
-                dosis: dosis || null
+                dosis: dosis || null,
+                duracion_dias: duracion_dias || null,
+                proxima_aplicacion: proximaAplicacion
             })
 
             const msg = encodeURIComponent('Antiparasitario actualizado exitosamente')
@@ -133,7 +167,7 @@ exports.delete = [
         try {
             const antiparasitario = await Antiparasitario.findOne({
                 where: { id_antiparasitario: req.params.id },
-                include: [{ 
+                include: [{
                     model: Mascota,
                     as: 'mascota'
                 }]
