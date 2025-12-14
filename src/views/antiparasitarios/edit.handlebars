@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h1 class="text-center mb-4">Editar Antiparasitario</h1>
-            
+
             <div class="card shadow">
                 <div class="card-body p-4">
                     <form action="/antiparasitarios/{{antiparasitario.id_antiparasitario}}?_method=PUT" method="POST">
@@ -10,20 +10,47 @@
 
                         <div class="mb-3">
                             <label for="producto" class="form-label">Producto *</label>
-                            <input type="text" name="producto" class="form-control" id="producto" 
+                            <input type="text" name="producto" class="form-control" id="producto"
                                 value="{{antiparasitario.producto}}" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="fecha" class="form-label">Fecha de Aplicación *</label>
-                            <input type="date" name="fecha" class="form-control" id="fecha" 
+                            <input type="date" name="fecha" class="form-control" id="fecha"
                                 value="{{antiparasitario.fecha}}" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="dosis" class="form-label">Dosis</label>
-                            <input type="text" name="dosis" class="form-control" id="dosis" 
-                                value="{{antiparasitario.dosis}}">
+                            <input type="text" name="dosis" class="form-control" id="dosis"
+                                value="{{antiparasitario.dosis}}" placeholder="Ej: 1 comprimido, 0.5ml">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="duracion_dias" class="form-label">Duración de Protección (días)</label>
+                            <input type="number" name="duracion_dias" class="form-control" id="duracion_dias"
+                                value="{{antiparasitario.duracion_dias}}" placeholder="Ej: 90 (3 meses)" min="1">
+                            <small class="text-muted">
+                                Si completas este campo, se calculará automáticamente la fecha de la próxima aplicación
+                            </small>
+                        </div>
+
+                        {{#if antiparasitario.proxima_aplicacion}}
+                        <div class="alert alert-success">
+                            <strong>📅 Próxima aplicación calculada:</strong> {{formatDate
+                            antiparasitario.proxima_aplicacion}}
+                        </div>
+                        {{/if}}
+
+                        <div class="alert alert-info">
+                            <small><strong>💡 Duraciones comunes:</strong></small>
+                            <ul class="mb-0 mt-2">
+                                <li>Bravecto: 90 días (3 meses)</li>
+                                <li>Nexgard: 30 días (1 mes)</li>
+                                <li>Revolution/Stronghold: 30 días</li>
+                                <li>Simparica: 30-35 días</li>
+                                <li>Desparasitantes internos: 90-180 días</li>
+                            </ul>
                         </div>
 
                         <div class="d-grid gap-2">
