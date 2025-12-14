@@ -1,12 +1,36 @@
 const { Vacuna, Mascota } = require('../models/associations')
 const { requireAuth } = require('../middlewares/auth')
 
+// ✅ FUNCIÓN AUXILIAR CORREGIDA: Calcular próxima aplicación
+function calcularProximaAplicacion(fecha, duracionDias) {
+    if (!duracionDias || duracionDias <= 0) return null
+
+    // Asegurarse de que la fecha esté en formato correcto
+    const fechaBase = new Date(fecha + 'T00:00:00')
+
+    // Verificar que la fecha sea válida
+    if (isNaN(fechaBase.getTime())) {
+        console.error('Fecha inválida:', fecha)
+        return null
+    }
+
+    // Sumar los días de duración
+    fechaBase.setDate(fechaBase.getDate() + parseInt(duracionDias))
+
+    // Retornar en formato YYYY-MM-DD
+    const year = fechaBase.getFullYear()
+    const month = String(fechaBase.getMonth() + 1).padStart(2, '0')
+    const day = String(fechaBase.getDate()).padStart(2, '0')
+
+    return `${year}-${month}-${day}`
+}
+
 exports.new = [
     requireAuth,
     async (req, res, next) => {
         try {
             const { id_mascota } = req.query
-            
+
             const mascota = await Mascota.findOne({
                 where: { id_mascota, id_tutor: req.auth.id }
             })
@@ -26,7 +50,7 @@ exports.create = [
     requireAuth,
     async (req, res, next) => {
         try {
-            const { tipo, fecha, veterinario, id_mascota } = req.body
+            const { tipo, fecha, veterinario, duracion_dias, id_mascota } = req.body
 
             if (!tipo || !fecha || !id_mascota) {
                 return res.status(400).send('Faltan campos obligatorios: tipo de vacuna, fecha y mascota')
@@ -40,10 +64,15 @@ exports.create = [
                 return res.status(404).send('Mascota no encontrada o no autorizada')
             }
 
+            // ✅ Calcular próxima aplicación
+            const proximaAplicacion = calcularProximaAplicacion(fecha, duracion_dias)
+
             await Vacuna.create({
                 tipo,
                 fecha,
                 veterinario: veterinario || null,
+                duracion_dias: duracion_dias || null,
+                proxima_aplicacion: proximaAplicacion,
                 id_mascota: parseInt(id_mascota)
             })
 
@@ -62,7 +91,7 @@ exports.edit = [
         try {
             const vacuna = await Vacuna.findOne({
                 where: { id_vacuna: req.params.id },
-                include: [{ 
+                include: [{
                     model: Mascota,
                     as: 'mascota'
                 }]
@@ -90,7 +119,7 @@ exports.update = [
     async (req, res, next) => {
         try {
             const { id } = req.params
-            const { tipo, fecha, veterinario, id_mascota } = req.body
+            const { tipo, fecha, veterinario, duracion_dias, id_mascota } = req.body
 
             if (!tipo || !fecha) {
                 return res.status(400).send('Faltan campos obligatorios')
@@ -98,7 +127,7 @@ exports.update = [
 
             const vacuna = await Vacuna.findOne({
                 where: { id_vacuna: id },
-                include: [{ 
+                include: [{
                     model: Mascota,
                     as: 'mascota'
                 }]
@@ -112,10 +141,15 @@ exports.update = [
                 return res.status(403).send('No autorizado')
             }
 
+            // ✅ Calcular próxima aplicación
+            const proximaAplicacion = calcularProximaAplicacion(fecha, duracion_dias)
+
             await vacuna.update({
                 tipo,
                 fecha,
-                veterinario: veterinario || null
+                veterinario: veterinario || null,
+                duracion_dias: duracion_dias || null,
+                proxima_aplicacion: proximaAplicacion
             })
 
             const msg = encodeURIComponent('Vacuna actualizada exitosamente')
@@ -133,7 +167,7 @@ exports.delete = [
         try {
             const vacuna = await Vacuna.findOne({
                 where: { id_vacuna: req.params.id },
-                include: [{ 
+                include: [{
                     model: Mascota,
                     as: 'mascota'
                 }]
